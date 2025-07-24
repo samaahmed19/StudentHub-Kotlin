@@ -18,4 +18,17 @@ class Manager {
     fun getStudentsByAge(age: Int): List<Student> {
         return students.filter { it.age == age }
     }
+
+    fun getStudentsByName(name: String): List<Student> {
+        return students.filter { it.name == name }
+    }
+    fun  getStudentsByStatus(status: String): List<Student> {
+        return students.filter { it.status == status }
+    }
+    fun  getStudentsByGpa(gpa: Double): List<Student> {
+        return students.filter { it.gpa == gpa }
+    }
+    fun getStudentsByGpaRange(min: Double, max: Double): List<Student> {
+        return students.filter { it.gpa in min..max }
+    }
 }
