@@ -32,6 +32,40 @@ fun main() {
             }
         }
     }
+    fun getValidName(): String {
+        while (true) {
+            print("Enter name: ")
+            val nameInput = readln()
+            if (nameInput.isNotBlank()) {
+                return nameInput
+            } else {
+                println("Invalid name. Name cannot be empty.")
+            }
+        }
+    }
+    fun getValidAge(): Int {
+        while (true) {
+            print("Enter age: ")
+            val ageRawInput = readln()
+            val ageInput = ageRawInput.toIntOrNull()
+            if (ageRawInput.isNotBlank() && ageInput != null && ageInput in 6..60) {
+                return ageInput
+            } else {
+                println("Invalid age. Age must be between 6 and 60 and cannot be empty.")
+            }
+        }
+    }
+    fun getValidGpa(): Double {
+        while (true) {
+            print("Enter GPA: ")
+            val gpaInput = readln()
+            if (gpaInput.isNotBlank() && gpaInput.toDoubleOrNull() != null && gpaInput.toDouble() in 0.0..4.0) {
+                return gpaInput.toDouble()
+            } else {
+                println("Invalid GPA. GPA must be a number between 0 and 4 and cannot be empty.")
+            }
+        }
+    }
     while (true) {
         println(
             """
@@ -46,35 +80,16 @@ fun main() {
         print("Enter your choice: ")
         when (readln().toIntOrNull()) {
             1 -> {
-                print("Enter name: ")
-                val nameInput = readln()
-                val name = if (nameInput.isNotBlank()) nameInput else {
-                    println("Invalid name. Name cannot be empty.")
-                    continue
-                }
-
-                print("Enter age: ")
-                val ageRawInput = readln()
-                val ageInput = ageRawInput.toIntOrNull()
-                val age = if (ageRawInput.isNotBlank() && ageInput != null && ageInput in 6..18) {
-                    ageInput
-                } else {
-                    println("Invalid age. Age must be between 6 and 18 and cannot be empty.")
-                    continue
-                }
+                val name = getValidName()
+                val age = getValidAge()
 
                 print("Enter grade: ")
                 val grade = readln()
 
                 print("Enter status: ")
                 val status = readln()
-
-                print("Enter GPA: ")
-                val gpaInput = readln()
-                val gpa = if (gpaInput.isNotBlank() && gpaInput.toDoubleOrNull() != null && gpaInput.toDouble() in 0.0..4.0) gpaInput.toDouble() else {
-                    println("Invalid GPA. GPA must be a number between 0 and 4 and cannot be empty.")
-                    continue
-                }
+                
+                val gpa = getValidGpa()
 
                 val student = Student(name, age, grade, status, gpa)
                 handleUserCommand(StudentCommand.AddStudent(student))
@@ -89,15 +104,7 @@ fun main() {
             }
 
             4 -> {
-                print("Enter age to filter: ")
-                val ageRawInput = readln()
-                val ageInput = ageRawInput.toIntOrNull()
-                val age = if (ageRawInput.isNotBlank() && ageInput != null && ageInput in 6..18) {
-                    ageInput
-                } else {
-                    println("Invalid age. Age must be between 6 and 18 and cannot be empty.")
-                    continue
-                }
+                val age = getValidAge()
                 handleUserCommand(StudentCommand.GetStudentsByAge(age))
             }
 
