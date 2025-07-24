@@ -119,7 +119,6 @@ fun main() {
                 }
             }
 
-            else -> println("Invalid option. Try again.")
             else -> {
                 val invalidChoiceMessage = "Invalid option. Try again."
                 invalidChoiceMessage.showMessage()
