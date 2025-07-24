@@ -7,8 +7,8 @@ sealed class StudentCommand {
     data object GetStudents : StudentCommand()
     data class GetStudentsByGrade(val grade: String) : StudentCommand()
     data class GetStudentsByAge(val age: Int) : StudentCommand()
-    data class GetStudentsByName(val name: String) : StudentCommand()
-    data class GetStudentsByStatus(val status: String) : StudentCommand()
-    data class GetStudentsByGpa(val gpa: Double) : StudentCommand()
-    data class GetStudentsByGpaRange(val minGpa: Double, val maxGpa: Double) : StudentCommand()
+    data class RemoveStudentByName(val name: String) : StudentCommand()
+    data class RemoveStudentById(val id: Int) : StudentCommand()
+    data class UpdateStudentByName(val name: String, val updatedStudent: Student) : StudentCommand()
+    data class UpdateStudentById(val id: Int, val updatedStudent: Student) : StudentCommand()
 }
