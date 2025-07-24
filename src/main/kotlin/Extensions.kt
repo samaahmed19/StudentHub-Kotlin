@@ -11,7 +11,10 @@ fun Double.setStatus(): String =
     if (this >= 2.0) "Passed" else "Failed"
 fun String.validateGrade(validGrades: List<String>): String? =
     takeIf { it.isNotBlank() && it in validGrades }
-
+fun String.validateId(): Int? =
+    toIntOrNull()?.takeIf { it > 0 }
+fun String.validateStatus(): String? =
+    takeIf { equals("Passed", ignoreCase = true) || equals("Failed", ignoreCase = true) }?.replaceFirstChar { it.uppercase() }
 fun Double.setGrade(): String = when {
     this >= 3.8 -> "A+"
     this >= 3.4 -> "A"

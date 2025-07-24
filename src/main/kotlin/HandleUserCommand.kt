@@ -1,3 +1,8 @@
+import Validator.getGrade
+import Validator.getStatus
+import Validator.getValidAge
+import Validator.getValidGpa
+import Validator.getValidName
 import org.example.StudentCommand
 import org.example.models.Student
 
@@ -64,7 +69,21 @@ object HandleUserCommand {
                     println("Students with status ${command.status}:")
                     filteredStudents.forEach { println(it) }
                 }
+                }
+
+
+            is StudentCommand.RemoveStudentById -> students.removeIf { it.id == command.id }
+            is StudentCommand.UpdateStudentById-> {
+                val studentIndex = students.indexOfFirst { it.id == command.id }
+                if (studentIndex == -1) {
+                    println("Student with ID $command.id not found.")
+                    return
+                }
+
+                val current = students[studentIndex]
+                updateFieldsChoices(students, studentIndex, current)
             }
+
         }
     }
 }

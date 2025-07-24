@@ -10,7 +10,14 @@ object Validator {
             invalidNameMessage.showMessage()
         }
     }
-
+    fun getValidId(): Int {
+        while (true) {
+            print("Enter ID: ")
+            val raw = readln()
+            raw.validateId()?.let { return it }
+            println("Invalid ID.")
+        }
+    }
     fun getValidAge(): Int {
         while (true) {
             val agePrompt = "Enter age (6-60): "
@@ -46,4 +53,24 @@ object Validator {
     fun getStatus(gpa: Double): String = gpa.setStatus()
 
     fun getGrade(gpa: Double): String = gpa.setGrade()
+    fun getValidStatus(): String {
+        while (true) {
+            val statusPrompt = "Enter status (Passed/Failed): "
+            statusPrompt.showMessage()
+            val input = readln()
+            input.validateStatus()?.let { return it }
+            val invalidStatusMessage = "Invalid status. Status must be either 'Passed' or 'Failed'."
+            invalidStatusMessage.showMessage()
+        }
+    }
+    fun getValidGpaRange(type:String): Double {
+        while (true) {
+            val rangePrompt = "Enter $type GPA (0.0-4.0): "
+            rangePrompt.showMessage()
+            val raw = readln()
+            raw.toValidGpa()?.let { return it }
+            val invalidRangeMessage = "Invalid GPA. GPA must be a number between 0.0 and 4.0."
+            invalidRangeMessage.showMessage()
+        }
+    }
 }
