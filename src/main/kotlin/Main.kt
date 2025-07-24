@@ -1,142 +1,122 @@
 package org.example
 
+import HandleUserCommand
+import Validator.getGrade
+import Validator.getStatus
+import Validator.getValidAge
+import Validator.getValidGpa
+import Validator.getValidGpaRange
+import Validator.getValidGrade
+import Validator.getValidId
+import Validator.getValidName
+import Validator.getValidStatus
 import org.example.models.Student
+import showMessage
 
 fun main() {
     val students = mutableListOf<Student>()
 
-    fun removeStudentById(id: Int): Boolean {
-        return students.removeIf { it.id == id }
-    }
 
-    fun removeStudentByName(name: String): Boolean {
-        return students.removeIf { it.name.equals(name, ignoreCase = true) }
-    }
 
-    fun updateStudentById(id: Int) {
-        val studentIndex = students.indexOfFirst { it.id == id }
-        if (studentIndex == -1) {
-            println("Student with ID $id not found.")
-            return
-        }
 
-        println("Enter new name:")
-        val name = readln()
-        println("Enter new age:")
-        val age = readln().toIntOrNull() ?: 0
-        println("Enter new grade:")
-        val grade = readln()
-        println("Enter new status:")
-        val status = readln()
-        println("Enter new GPA:")
-        val gpa = readln().toDoubleOrNull() ?: 0.0
 
-        val updatedStudent = Student(name, age, grade, status, gpa, id)
-        students[studentIndex] = updatedStudent
-        println("Student updated successfully.")
-    }
+
+
 
     while (true) {
-        println(
-            """
+        val menu = """
             Please choose an option:
             1. Add new student
             2. View all students
             3. Filter by grade
             4. Filter by age
-            5. Update student by ID
-            6. Exit
-            7. Remove student by ID
-            8. Remove student by name
+            5. Filter by GPA
+            6. Filter by GPA range
+            7. Filter by name
+            8. Filter by status
+            9. Update student by ID
+            10. Remove student by ID
+            11. Exit
         """.trimIndent()
-        )
-        print("Enter your choice: ")
+        menu.showMessage()
+        val choiceString="Enter your choice: "
+        choiceString.showMessage()
         when (readln().toIntOrNull()) {
             1 -> {
-                print("Enter ID: ")
-                val id = readln().toIntOrNull() ?: 0
+                val name = getValidName()
+                val age = getValidAge()
 
-                print("Enter name: ")
-                val name = readln()
+                val gpa=getValidGpa()
 
-                print("Enter age: ")
-                val age = readln().toIntOrNull() ?: 0
+                val grade = getGrade(gpa)
+                val status = getStatus(gpa)
+                var randomId: Int
+                do {
+                    randomId = (1..1000).random()
+                } while (students.any { it.id == randomId })
 
-                print("Enter grade: ")
-                val grade = readln()
-
-                print("Enter status: ")
-                val status = readln()
-
-                print("Enter GPA: ")
-                val gpa = readln().toDoubleOrNull() ?: 0.0
-
-                val student = Student(name, age, grade, status, gpa, id)
-                students.add(student)
+                val student = Student(name, age, grade, status, gpa, randomId )
+                HandleUserCommand.handle(StudentCommand.AddStudent(student), students)
+                val studentId="your ID is ${student.id}"
+                studentId.showMessage()
             }
 
-            2 -> {
-                if (students.isEmpty()) {
-                    println("No students available.")
-                } else {
-                    students.forEach { println(it) }
-                }
-            }
+            2 -> HandleUserCommand.handle(StudentCommand.GetStudents, students)
 
             3 -> {
-                print("Enter grade to filter: ")
-                val grade = readln()
-                val filtered = students.filter { it.grade == grade }
-                if (filtered.isEmpty()) {
-                    println("No students found with grade $grade.")
-                } else {
-                    filtered.forEach { println(it) }
-                }
+                val grade=getValidGrade()
+                HandleUserCommand.handle(StudentCommand.GetStudentsByGrade(grade), students)
             }
 
             4 -> {
-                print("Enter age to filter: ")
-                val age = readln().toIntOrNull() ?: 0
-                val filtered = students.filter { it.age == age }
-                if (filtered.isEmpty()) {
-                    println("No students found with age $age.")
-                } else {
-                    filtered.forEach { println(it) }
-                }
+                val age = getValidAge()
+                HandleUserCommand.handle(StudentCommand.GetStudentsByAge(age), students)
             }
-
             5 -> {
-                print("Enter student ID to update: ")
-                val id = readln().toIntOrNull()
-                if (id != null) updateStudentById(id) else println("Invalid ID")
+                val gpa = getValidGpa()
+                HandleUserCommand.handle(StudentCommand.GetStudentsByGpa(gpa), students)
+            }
+            6 -> {
+                val minGpa = getValidGpaRange("Min")
+                val maxGpa = getValidGpaRange("Max")
+                if (minGpa > maxGpa) {
+                    val invalidRangeMessage = "Invalid GPA range. Min GPA cannot be greater than Max GPA."
+                    invalidRangeMessage.showMessage()
+                    continue
+                }
+                HandleUserCommand.handle(StudentCommand.GetStudentsByGpaRange(minGpa, maxGpa), students)
+            }
+            7 -> {
+                val name = getValidName()
+                HandleUserCommand.handle(StudentCommand.GetStudentsByName(name), students)
+            }
+            8-> {
+                val status = getValidStatus()
+                HandleUserCommand.handle(StudentCommand.GetStudentsByStatus(status), students)
+            }
+            9 -> {
+                val id = getValidId()
+                HandleUserCommand.handle(StudentCommand.UpdateStudentById(id), students)
             }
 
-            6 -> {
-                println("Exiting...")
+
+            10 -> {
+                val id= getValidId()
+                HandleUserCommand.handle(StudentCommand.RemoveStudentById(id), students)
+            }
+
+
+            11-> {
+                val exitMessage = "Exiting the program. Goodbye!"
+                exitMessage.showMessage()
                 return
             }
-
-            7 -> {
-                print("Enter student ID to remove: ")
-                val id = readln().toIntOrNull()
-                if (id != null && removeStudentById(id)) {
-                    println("Student with ID $id removed.")
-                } else {
-                    println("Student not found.")
-                }
+            else -> {
+                val invalidChoiceMessage = "Invalid option. Try again."
+                invalidChoiceMessage.showMessage()
             }
-
-            8 -> {
-                print("Enter student name to remove: ")
-                val name = readln()
-                if (removeStudentByName(name)) {
-                    println("Student named $name removed.")
-                } else {
-                    println("Student not found.")
-                }
-            }
-
-            else -> println("Invalid option. Try again.")
         }
     }
 }
+
+
