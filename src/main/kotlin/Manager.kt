@@ -1,5 +1,6 @@
 package org.example
 
+import org.example.models.Student
 import kotlin.collections.mutableListOf
 
 class Manager {
