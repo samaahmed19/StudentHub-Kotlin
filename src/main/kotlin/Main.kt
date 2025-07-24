@@ -30,77 +30,6 @@ fun main() {
                     filteredStudents.forEach { println(it) }
                 }
             }
-
-            is StudentCommand.GetStudentsByGpa -> {
-                val filteredStudents = students.filter { it.gpa == command.gpa }
-                if (filteredStudents.isEmpty()) {
-                    println("No students found with GPA ${command.gpa}.")
-                } else {
-                    println("Students with GPA ${command.gpa}:")
-                    filteredStudents.forEach { println(it) }
-                }
-            }
-            is StudentCommand.GetStudentsByGpaRange -> {
-                val filteredStudents = students.filter { it.gpa in command.minGpa..command.maxGpa }
-                if (filteredStudents.isEmpty()) {
-                    println("No students found with GPA between ${command.minGpa} and ${command.maxGpa}.")
-                } else {
-                    println("Students with GPA between ${command.minGpa} and ${command.maxGpa}:")
-                    filteredStudents.forEach { println(it) }
-                }
-            }
-            is StudentCommand.GetStudentsByName -> {
-                val filteredStudents = students.filter { it.name.equals(command.name, ignoreCase = true) }
-                if (filteredStudents.isEmpty()) {
-                    println("No students found with name ${command.name}.")
-                } else {
-                    println("Students with name ${command.name}:")
-                    filteredStudents.forEach { println(it) }
-                }
-            }
-            is StudentCommand.GetStudentsByStatus -> {
-                val filteredStudents = students.filter { it.status.equals(command.status, ignoreCase = true) }
-                if (filteredStudents.isEmpty()) {
-                    println("No students found with status ${command.status}.")
-                } else {
-                    println("Students with status ${command.status}:")
-                    filteredStudents.forEach { println(it) }
-                }
-            }
-        }
-    }
-    fun getValidName(): String {
-        while (true) {
-            print("Enter name: ")
-            val nameInput = readln()
-            if (nameInput.isNotBlank()) {
-                return nameInput
-            } else {
-                println("Invalid name. Name cannot be empty.")
-            }
-        }
-    }
-    fun getValidAge(): Int {
-        while (true) {
-            print("Enter age: ")
-            val ageRawInput = readln()
-            val ageInput = ageRawInput.toIntOrNull()
-            if (ageRawInput.isNotBlank() && ageInput != null && ageInput in 6..60) {
-                return ageInput
-            } else {
-                println("Invalid age. Age must be between 6 and 60 and cannot be empty.")
-            }
-        }
-    }
-    fun getValidGpa(): Double {
-        while (true) {
-            print("Enter GPA: ")
-            val gpaInput = readln()
-            if (gpaInput.isNotBlank() && gpaInput.toDoubleOrNull() != null && gpaInput.toDouble() in 0.0..4.0) {
-                return gpaInput.toDouble()
-            } else {
-                println("Invalid GPA. GPA must be a number between 0 and 4 and cannot be empty.")
-            }
         }
     }
     while (true) {
@@ -117,16 +46,20 @@ fun main() {
         print("Enter your choice: ")
         when (readln().toIntOrNull()) {
             1 -> {
-                val name = getValidName()
-                val age = getValidAge()
+                print("Enter name: ")
+                val name = readln()
+
+                print("Enter age: ")
+                val age = readln().toIntOrNull() ?: 0
 
                 print("Enter grade: ")
                 val grade = readln()
 
                 print("Enter status: ")
                 val status = readln()
-                
-                val gpa = getValidGpa()
+
+                print("Enter GPA: ")
+                val gpa = readln().toDoubleOrNull() ?: 0.0
 
                 val student = Student(name, age, grade, status, gpa)
                 handleUserCommand(StudentCommand.AddStudent(student))
@@ -141,7 +74,8 @@ fun main() {
             }
 
             4 -> {
-                val age = getValidAge()
+                print("Enter age to filter: ")
+                val age = readln().toIntOrNull() ?: 0
                 handleUserCommand(StudentCommand.GetStudentsByAge(age))
             }
 
