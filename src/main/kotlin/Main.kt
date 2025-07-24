@@ -47,10 +47,21 @@ fun main() {
         when (readln().toIntOrNull()) {
             1 -> {
                 print("Enter name: ")
-                val name = readln()
+                val nameInput = readln()
+                val name = if (nameInput.isNotBlank()) nameInput else {
+                    println("Invalid name. Name cannot be empty.")
+                    continue
+                }
 
                 print("Enter age: ")
-                val age = readln().toIntOrNull() ?: 0
+                val ageRawInput = readln()
+                val ageInput = ageRawInput.toIntOrNull()
+                val age = if (ageRawInput.isNotBlank() && ageInput != null && ageInput in 6..18) {
+                    ageInput
+                } else {
+                    println("Invalid age. Age must be between 6 and 18 and cannot be empty.")
+                    continue
+                }
 
                 print("Enter grade: ")
                 val grade = readln()
@@ -59,7 +70,11 @@ fun main() {
                 val status = readln()
 
                 print("Enter GPA: ")
-                val gpa = readln().toDoubleOrNull() ?: 0.0
+                val gpaInput = readln()
+                val gpa = if (gpaInput.isNotBlank() && gpaInput.toDoubleOrNull() != null && gpaInput.toDouble() in 0.0..4.0) gpaInput.toDouble() else {
+                    println("Invalid GPA. GPA must be a number between 0 and 4 and cannot be empty.")
+                    continue
+                }
 
                 val student = Student(name, age, grade, status, gpa)
                 handleUserCommand(StudentCommand.AddStudent(student))
@@ -75,7 +90,14 @@ fun main() {
 
             4 -> {
                 print("Enter age to filter: ")
-                val age = readln().toIntOrNull() ?: 0
+                val ageRawInput = readln()
+                val ageInput = ageRawInput.toIntOrNull()
+                val age = if (ageRawInput.isNotBlank() && ageInput != null && ageInput in 6..18) {
+                    ageInput
+                } else {
+                    println("Invalid age. Age must be between 6 and 18 and cannot be empty.")
+                    continue
+                }
                 handleUserCommand(StudentCommand.GetStudentsByAge(age))
             }
 
