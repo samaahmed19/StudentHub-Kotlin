@@ -52,15 +52,11 @@ fun main() {
                 print("Enter age: ")
                 val age = readln().toIntOrNull() ?: 0
 
-                print("Enter grade: ")
-                val grade = readln()
-
-                print("Enter status: ")
-                val status = readln()
-
                 print("Enter GPA: ")
                 val gpa = readln().toDoubleOrNull() ?: 0.0
 
+                val grade = getGrade(gpa)
+                val status = getStatus(gpa)
                 val student = Student(name, age, grade, status, gpa)
                 handleUserCommand(StudentCommand.AddStudent(student))
             }
@@ -89,4 +85,24 @@ fun main() {
     }
 }
 
+fun getStatus(gpa: Double): String {
+    return if(gpa>=2.0){
+        "Passed"
+    } else {
+        "Failed"
+    }
+}
 
+fun getGrade(gpa: Double): String {
+    return when {
+        gpa >= 3.8 -> "A+"
+        gpa >= 3.4 -> "A"
+        gpa >= 3 -> "B+"
+        gpa >= 2.8 -> "B"
+        gpa >= 2.6 -> "C+"
+        gpa >= 2.4 -> "C"
+        gpa >= 2.2 -> "D+"
+        gpa >= 2.0 -> "D"
+        else -> "F"
+    }
+}
