@@ -10,12 +10,22 @@ object HandleUserCommand {
     fun handle(command: StudentCommand, students: MutableList<Student>) {
         when (command) {
             is StudentCommand.AddStudent -> {
-                students.add(command.student)
+                try {
+                    students.add(command.student.apply {
+                        println("Student $name is added")
+                    })
+                } catch (e: Exception) {
+                    println("Error adding student ${e.message}")
+                }
             }
+
             is StudentCommand.GetStudents -> {
                 println("All students:")
-                students.forEach { println(it) }
+                students.forEach {
+                    println("Name: ${it.name}, Age: ${it.age}, GPA: ${it.gpa ?: "N/A"}, Grade: ${it.grade}, Status: ${it.status}, ID: ${it.id}")
+                }
             }
+
             is StudentCommand.GetStudentsByGrade -> {
                 val filteredStudents = students.filter { it.grade == command.grade }
                 if (filteredStudents.isEmpty()) {
@@ -25,6 +35,7 @@ object HandleUserCommand {
                     filteredStudents.forEach { println(it) }
                 }
             }
+
             is StudentCommand.GetStudentsByAge -> {
                 val filteredStudents = students.filter { it.age == command.age }
                 if (filteredStudents.isEmpty()) {
@@ -34,8 +45,9 @@ object HandleUserCommand {
                     filteredStudents.forEach { println(it) }
                 }
             }
+
             is StudentCommand.GetStudentsByGpa -> {
-                val filteredStudents = students.filter { it.gpa == command.gpa }
+                val filteredStudents = students.filter { it.gpa != null && it.gpa == command.gpa }
                 if (filteredStudents.isEmpty()) {
                     println("No students found with GPA ${command.gpa}.")
                 } else {
@@ -43,8 +55,9 @@ object HandleUserCommand {
                     filteredStudents.forEach { println(it) }
                 }
             }
+
             is StudentCommand.GetStudentsByGpaRange -> {
-                val filteredStudents = students.filter { it.gpa in command.minGpa..command.maxGpa }
+                val filteredStudents = students.filter { it.gpa?.let { g -> g in command.minGpa..command.maxGpa } == true }
                 if (filteredStudents.isEmpty()) {
                     println("No students found with GPA between ${command.minGpa} and ${command.maxGpa}.")
                 } else {
@@ -52,6 +65,7 @@ object HandleUserCommand {
                     filteredStudents.forEach { println(it) }
                 }
             }
+
             is StudentCommand.GetStudentsByName -> {
                 val filteredStudents = students.filter { it.name.equals(command.name, ignoreCase = true) }
                 if (filteredStudents.isEmpty()) {
@@ -61,6 +75,7 @@ object HandleUserCommand {
                     filteredStudents.forEach { println(it) }
                 }
             }
+
             is StudentCommand.GetStudentsByStatus -> {
                 val filteredStudents = students.filter { it.status.equals(command.status, ignoreCase = true) }
                 if (filteredStudents.isEmpty()) {
@@ -69,14 +84,25 @@ object HandleUserCommand {
                     println("Students with status ${command.status}:")
                     filteredStudents.forEach { println(it) }
                 }
+            }
+
+            is StudentCommand.RemoveStudentById -> {
+                try {
+                    val removed = students.removeIf { it.id == command.id }
+                    if (removed) {
+                        println("Student with ID ${command.id} removed.")
+                    } else {
+                        println("No student found with ID ${command.id}.")
+                    }
+                } catch (e: Exception) {
+                    println("Error removing student: ${e.message}")
                 }
+            }
 
-
-            is StudentCommand.RemoveStudentById -> students.removeIf { it.id == command.id }
-            is StudentCommand.UpdateStudentById-> {
+            is StudentCommand.UpdateStudentById -> {
                 val studentIndex = students.indexOfFirst { it.id == command.id }
                 if (studentIndex == -1) {
-                    println("Student with ID $command.id not found.")
+                    println("Student with ID ${command.id} not found.")
                     return
                 }
 
@@ -84,6 +110,11 @@ object HandleUserCommand {
                 updateFieldsChoices(students, studentIndex, current)
             }
 
+            else -> {
+                println("Unknown command")
+            }
+            }
+
         }
     }
-}
+
