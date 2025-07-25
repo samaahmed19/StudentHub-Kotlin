@@ -21,10 +21,10 @@ fun main() {
 
 
 
-
 /* we will show for user some choices from 1 to 11 any operation he want
  to do it if he choose num not shown we will shoe this mess" Invalid option. Try again."
  */
+ main
     while (true) {
         val menu = """
             Please choose an option:
@@ -109,8 +109,36 @@ fun main() {
 
 
             11-> {
+                val report="This Is Small Report For Students Status :"
+                report.showMessage()
+                 //for total number of students
+                val totalStudents = students.fold(0) { count, _ -> count + 1 }
+                println("--Total number of students: $totalStudents")
+
+                //average gpa report
+                println("Avg Gpas Report :")
+                val passedGPA=students.filter { it.status.equals("Passed", ignoreCase = true) }
+                    .mapNotNull { it.gpa}
+                val avg=passedGPA.average()
+                    println("--Avg GPA is : $avg")
+
+                 //for top level / the highst gpa
+                println("Top student :")
+                val topStudent = students.filter { it.gpa != null }
+                    .reduce { acc, student ->
+                        if ((student.gpa ?: 0.0) > (acc.gpa ?: 0.0)) student else acc
+                    }
+                println("--Top GPA: ${topStudent.gpa} by ${topStudent.name}")
+
+
+                println("After Filtering the Students According to their GPA (3.0 to 4.0 ) : ")
+                students.filter { it.gpa != null && it.gpa!! in 3.0..4.0 }
+                    .forEach { println(it) }
+
                 val exitMessage = "Exiting the program. Goodbye!"
                 exitMessage.showMessage()
+
+
                 return
             }
             else -> {
@@ -119,6 +147,8 @@ fun main() {
             }
         }
     }
+
+
 }
 
 
