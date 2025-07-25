@@ -90,7 +90,15 @@ object HandleUserCommand {
 
                 // Total number of students
                 val totalStudents = students.size
+
+                if (totalStudents == 0) {
+                    println("--No students to report.")
+                    return
+                }
+
                 println("--Total number of students: $totalStudents")
+
+
 
                 // Average GPA for passed students
                 println("Avg GPA Report:")
