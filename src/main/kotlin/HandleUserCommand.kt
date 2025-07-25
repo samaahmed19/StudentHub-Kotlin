@@ -84,6 +84,35 @@ object HandleUserCommand {
                 val current = students[studentIndex]
                 updateFieldsChoices(students, studentIndex, current)
             }
+            is StudentCommand.GenerateReport -> {
+                val report = "This Is Small Report For Students Status:"
+                report.showMessage()
+
+                // Total number of students
+                val totalStudents = students.size
+                println("--Total number of students: $totalStudents")
+
+                // Average GPA for passed students
+                println("Avg GPA Report:")
+                val passedGpas = students.filter { it.status.equals("Passed", ignoreCase = true) }
+                    .map { it.gpa }
+                val avg = if (passedGpas.isNotEmpty()) passedGpas.average() else 0.0
+                println("--Avg GPA is: $avg")
+
+                // Top GPA student
+                println("Top student:")
+                val topStudent = students.maxByOrNull { it.gpa }
+                if (topStudent != null) {
+                    println("--Top GPA: ${topStudent.gpa} by ${topStudent.name}")
+                } else {
+                    println("--No students found.")
+                }
+
+                // GPA range filtering
+                println("After Filtering the Students According to their GPA (3.0 to 4.0):")
+                students.filter { it.gpa in 3.0..4.0 }
+                    .forEach { println(it) }
+            }
 
         }
     }

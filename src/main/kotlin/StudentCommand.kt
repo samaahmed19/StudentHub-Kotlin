@@ -13,5 +13,7 @@ sealed class StudentCommand {
     data class GetStudentsByGpaRange(val minGpa: Double, val maxGpa: Double) : StudentCommand()
     data class GetStudentsByName(val name: String) : StudentCommand()
     data class GetStudentsByStatus(val status: String) : StudentCommand()
+    data object GenerateReport : StudentCommand()
+
 
 }
