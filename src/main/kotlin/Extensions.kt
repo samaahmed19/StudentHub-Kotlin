@@ -1,9 +1,12 @@
-fun String.validateName(): String? =
-    takeIf { it.isNotBlank() }
 
+//fun validateName to Make Name String Not Empty
+
+fun String.validateName(): String? =
+    takeIf { it.isNotBlank()}
+//fun validateAge to let Only People between 6 to 60
 fun String.validateAge(): Int? =
     toIntOrNull()?.takeIf { it in 6..60 }
-
+//Gpa may  be double and is between 0.0 and 4.0 Only
 fun String.toValidGpa(): Double? =
     toDoubleOrNull()?.takeIf { it in 0.0..4.0 }
 

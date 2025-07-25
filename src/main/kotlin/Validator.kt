@@ -1,3 +1,4 @@
+
 object Validator {
     val grades= listOf("A+","A" ,"B+","B", "C","C+", "D","D+", "F")
     fun getValidName(): String {
@@ -10,6 +11,7 @@ object Validator {
             invalidNameMessage.showMessage()
         }
     }
+
     fun getValidId(): Int {
         while (true) {
             print("Enter ID: ")
@@ -63,6 +65,10 @@ object Validator {
             invalidStatusMessage.showMessage()
         }
     }
+    /*
+    Gpa may  be double and is between 0.0 and 4.0 Only ,if he enter invalid num
+    this mess will print "Invalid GPA. GPA must be a number between 0.0 and 4.0."
+    */
     fun getValidGpaRange(type:String): Double {
         while (true) {
             val rangePrompt = "Enter $type GPA (0.0-4.0): "

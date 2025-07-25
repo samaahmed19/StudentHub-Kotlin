@@ -4,6 +4,9 @@ import Validator.getValidAge
 import Validator.getValidGpa
 import Validator.getValidName
 import org.example.models.Student
+import java.sql.DriverManager.println
+
+// when user want to update any info for student we will show for him 4 options , and he will select any option throw
 
 fun updateFieldsChoices(
     students: MutableList<Student>,
