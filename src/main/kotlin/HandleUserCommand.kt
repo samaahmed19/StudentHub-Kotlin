@@ -13,6 +13,7 @@ object HandleUserCommand {
                 students.add(command.student)
             }
             is StudentCommand.GetStudents -> {
+
                 println("All students:")
                 students.forEach { println(it) }
             }
